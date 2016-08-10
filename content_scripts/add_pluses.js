@@ -9,7 +9,36 @@
 //  break
 //}
 
-function doIt() {
+function watchCommentSection() {
+  var comment_renderer = document.getElementById('comment-section-renderer')
+
+  // the comment section is ready     
+  if (comment_renderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
+    addPluses()
+  } else {
+    var observerConfig = { childList: true }
+
+    // comment-section observer
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+      
+        if (mutation.type === 'childList') {
+
+          // the comment section is ready
+          if (mutation.target.firstChild.attributes.getNamedItem('data-child-tracking').value.length > 0) {
+            observer.disconnect()
+            addPluses()
+          }
+        }
+      })
+    })
+
+    var comment_renderer_wrapper = document.getElementById('watch-discussion')
+    observer.observe(comment_renderer_wrapper, observerConfig)
+  }
+}
+
+function addPluses() {
 
   var comment_footers = document.getElementsByClassName('comment-renderer-footer')
   var observerConfig = { childList: true };
@@ -61,17 +90,4 @@ function doIt() {
   }
 }
 
-function pressPlusKey() {
-  event = new KeyboardEvent(typeArg, KeyboardEventInit);
-
-}
-
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    console.log(sender.tab ?
-        "from a content script:" + sender.tab.url :
-        "from the extension");
-    if (request.action == "doit")
-      doIt()
-  }
-);
+watchCommentSection()
