@@ -1,9 +1,9 @@
 // watch the first load of the comment section
 function watchCommentSectionLoad() {
-  var comment_renderer = document.getElementById('comment-section-renderer')
+  var commentRenderer = document.getElementById('comment-section-renderer')
 
   // the comment section is ready     
-  if (comment_renderer && comment_renderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
+  if (commentRenderer && commentRenderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
     addPluses()
     watchHiddenReplies()
   } else {
@@ -25,8 +25,8 @@ function watchCommentSectionLoad() {
       })
     })
 
-    var comment_renderer_wrapper = document.getElementById('watch-discussion')
-    observer.observe(comment_renderer_wrapper, observerConfig)
+    var commentRendererWrapper = document.getElementById('watch-discussion')
+    observer.observe(commentRendererWrapper, observerConfig)
   }
 }
 
@@ -55,31 +55,31 @@ function watchHiddenReplies() {
 // add pluses to comments
 function addPluses(node = document) {
 
-  var comment_footers = node.getElementsByClassName('comment-renderer-footer')
+  var commentFooters = node.getElementsByClassName('comment-renderer-footer')
   var observerConfig = { childList: true };
  
-  for (let footer of comment_footers) {
-    let should_capture_next_mutation = false
-    let did_plus_reply = false
-    let plus_btn = document.createElement('button')
+  for (let footer of commentFooters) {
+    let shouldCaptureNextMutation = false
+    // let didPlusReply = false
+    let plusBtn = document.createElement('button')
     let plusImg = document.createElement('img')
     let plusUrl = chrome.extension.getURL('images/ic_plus_one_17dp.png')
 
     plusImg.setAttribute('src', plusUrl)
     plusImg.setAttribute('class', 'comment-action-buttons-plusreponse-img')
-    plus_btn.setAttribute('class', 'sprite-comment-actions')
-    plus_btn.appendChild(plusImg)
+    plusBtn.setAttribute('class', 'sprite-comment-actions')
+    plusBtn.appendChild(plusImg)
 
-    plus_btn.addEventListener('click', function() {
+    plusBtn.addEventListener('click', function() {
 
-      // avoid replying more than once
-      if (did_plus_reply == true) {
-        return
-      }
+      // // avoid replying more than once
+      // if (didPlusReply == true) {
+      //   return
+      // }
 
       var observer = new MutationObserver(function(mutations) {
         // avoids being triggered by the reply box hiding
-        if (should_capture_next_mutation == false) {
+        if (shouldCaptureNextMutation == false) {
           return
         }
           
@@ -90,8 +90,8 @@ function addPluses(node = document) {
             replyBtn = mutation.target.querySelector('.comment-simplebox-submit')
 
             replyBtn.disabled = false // i may need to simulate a keyboard event instead of doing this
-            should_capture_next_mutation = false // false to stop the reverse triggering of the mutation
-            did_plus_reply = true // true to avoid replying more than once
+            shouldCaptureNextMutation = false // false to stop the reverse triggering of the mutation
+            // didPlusReply = true // true to avoid replying more than once
 
             replyBtn.click()
           }
@@ -100,12 +100,12 @@ function addPluses(node = document) {
 
       observer.observe(this.parentElement.lastChild, observerConfig)
 
-      should_capture_next_mutation = true
+      shouldCaptureNextMutation = true
       this.parentElement.children[0].click()
     })
 
     commentMenu = footer.querySelector('.comment-renderer-action-menu')
-    footer.insertBefore(plus_btn, commentMenu)
+    footer.insertBefore(plusBtn, commentMenu)
   }
 }
 
