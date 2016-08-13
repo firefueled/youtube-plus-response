@@ -9,11 +9,11 @@
 //  break
 //}
 
-function watchCommentSection() {
+function watchCommentSectionLoad() {
   var comment_renderer = document.getElementById('comment-section-renderer')
 
   // the comment section is ready     
-  if (comment_renderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
+  if (comment_renderer && comment_renderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
     addPluses()
   } else {
     var observerConfig = { childList: true }
@@ -90,4 +90,4 @@ function addPluses() {
   }
 }
 
-watchCommentSection()
+watchCommentSectionLoad()
