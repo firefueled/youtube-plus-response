@@ -59,13 +59,16 @@ function addPluses(node = document) {
   var observerConfig = { childList: true };
  
   for (let footer of comment_footers) {
-    let plus_text = document.createTextNode('+')
-    let plus_btn = document.createElement('button')
-    
     let should_capture_next_mutation = false
     let did_plus_reply = false
-    
-    plus_btn.appendChild(plus_text)
+    let plus_btn = document.createElement('button')
+    let plusImg = document.createElement('img')
+    let plusUrl = chrome.extension.getURL('images/ic_plus_one_17dp.png')
+
+    plusImg.setAttribute('src', plusUrl)
+    plusImg.setAttribute('class', 'comment-action-buttons-plusreponse-img')
+    plus_btn.setAttribute('class', 'sprite-comment-actions')
+    plus_btn.appendChild(plusImg)
 
     plus_btn.addEventListener('click', function() {
 
@@ -101,7 +104,8 @@ function addPluses(node = document) {
       this.parentElement.children[0].click()
     })
 
-    footer.insertBefore(plus_btn, footer.children[5])
+    commentMenu = footer.querySelector('.comment-renderer-action-menu')
+    footer.insertBefore(plus_btn, commentMenu)
   }
 }
 

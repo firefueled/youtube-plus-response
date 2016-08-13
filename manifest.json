@@ -16,14 +16,15 @@
     "activeTab"
   ],
 
-  "background": {
-    "scripts": ["background_scripts/background.js"]
-  },
+  "web_accessible_resources": [
+    "images/*.png"
+  ],
 
   "content_scripts": [
     {
       "matches": ["*://*.youtube.com/*"],
-      "js": ["content_scripts/add_pluses.js"]
+      "js": ["content_scripts/add_pluses.js"],
+      "css": ["content_scripts/add_pluses.css"]
     }
   ],
 

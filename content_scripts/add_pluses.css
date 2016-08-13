@@ -1,0 +1,12 @@
+.comment-action-buttons-plusreponse-img {
+    opacity: 0.25;
+    cursor: pointer;
+}
+
+.comment-renderer:hover .comment-action-buttons-plusreponse-img {
+    opacity: 0.4;
+}
+
+.comment-renderer button .comment-action-buttons-plusreponse-img:hover {
+    opacity: 0.6;
+}
