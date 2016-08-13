@@ -1,20 +1,11 @@
-//var plus_btn = document.createElement('button')
-//var plus_text = document.createTextNode('+')
-//
-//plus_btn.appendChild(plus_text)
-//
-//var comment_footers = document.getElementsByClassName('comment-renderer-footer')
-//for (footer in comment_footers) {
-//  alert(footer)
-//  break
-//}
-
+// watch the first load of the comment section
 function watchCommentSectionLoad() {
   var comment_renderer = document.getElementById('comment-section-renderer')
 
   // the comment section is ready     
   if (comment_renderer && comment_renderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
     addPluses()
+    watchHiddenReplies()
   } else {
     var observerConfig = { childList: true }
 
@@ -28,6 +19,7 @@ function watchCommentSectionLoad() {
           if (mutation.target.firstChild.attributes.getNamedItem('data-child-tracking').value.length > 0) {
             observer.disconnect()
             addPluses()
+            watchHiddenReplies()
           }
         }
       })
@@ -38,9 +30,32 @@ function watchCommentSectionLoad() {
   }
 }
 
-function addPluses() {
+// Listens for clicks on the 'view all replies' buttons; adding pluses to the newly displayed comments
+function watchHiddenReplies() {
+  var showMoreRepliesBtns = document.getElementsByClassName('comment-replies-renderer-expander-down')
 
-  var comment_footers = document.getElementsByClassName('comment-renderer-footer')
+  for (let btn of showMoreRepliesBtns) {
+    btn.addEventListener('click', function() {
+
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'childList') {
+            observer.disconnect()
+            addPluses(btnParent)
+          }
+        })
+      })
+      // observe for changes so we can plus'em'up
+      var btnParent = btn.parentElement.parentElement.lastElementChild
+      observer.observe(btnParent, { childList: true })
+    })
+  }
+}
+
+// add pluses to comments
+function addPluses(node = document) {
+
+  var comment_footers = node.getElementsByClassName('comment-renderer-footer')
   var observerConfig = { childList: true };
  
   for (let footer of comment_footers) {
@@ -90,4 +105,5 @@ function addPluses() {
   }
 }
 
+// load pluses on the comment section first load
 watchCommentSectionLoad()
