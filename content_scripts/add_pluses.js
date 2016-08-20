@@ -109,5 +109,32 @@ function addPluses(node = document) {
   }
 }
 
-// load pluses on the comment section first load
+function watchVideoChanges() {
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.type === 'childList') {
+        console.log('#content changed===========')
+
+        // the price you pay for partial loading
+        var observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {  
+              watchCommentSectionLoad()
+            }
+          })
+        })
+        var content = document.querySelector('#watch7-container')
+        observer.observe(content, { childList: true })
+      }
+    })
+  })
+
+  var content = document.querySelector('#content')
+  observer.observe(content, { childList: true })
+}
+
+// watches for comment section load on first site loading and refreshes
 watchCommentSectionLoad()
+// watches for page re-renderings when a different video is loaded
+watchVideoChanges()
+
