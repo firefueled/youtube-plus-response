@@ -1,6 +1,9 @@
+.comment-action-buttons-plusreponse-btn {
+    cursor: pointer;
+}
+
 .comment-action-buttons-plusreponse-img {
     opacity: 0.25;
-    cursor: pointer;
 }
 
 .comment-renderer:hover .comment-action-buttons-plusreponse-img {

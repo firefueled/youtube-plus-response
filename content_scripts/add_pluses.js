@@ -67,7 +67,7 @@ function addPluses(node = document) {
 
     plusImg.setAttribute('src', plusUrl)
     plusImg.setAttribute('class', 'comment-action-buttons-plusreponse-img')
-    plusBtn.setAttribute('class', 'sprite-comment-actions')
+    plusBtn.setAttribute('class', 'sprite-comment-actions comment-action-buttons-plusreponse-btn')
     plusBtn.appendChild(plusImg)
 
     plusBtn.addEventListener('click', function() {
