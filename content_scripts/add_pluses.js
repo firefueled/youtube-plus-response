@@ -39,8 +39,8 @@ function watchHiddenReplies() {
 
       var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
-          if (mutation.type === 'childList') {
-            observer.disconnect()
+          // this should be triggered only when new nodes (the hidden comments) are added
+          if (mutation.type === 'childList' && mutation.addedNodes.length != 0) {
             addPluses(btnParent)
           }
         })
