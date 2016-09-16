@@ -57,19 +57,7 @@ function watchHiddenReplies() {
   }
 }
 
-// add plus buttons to comments
-function addPluses(node = document) {
-
-  var commentFooters = node.getElementsByClassName('comment-renderer-footer')
- 
-  for (let footer of commentFooters) {
-    plusBtn = newPlusButton()
-
-    commentMenu = footer.querySelector('.comment-renderer-action-menu')
-    footer.insertBefore(plusBtn, commentMenu)
-  }
-}
-
+// listens for the loading of a different video, triggering it's comment section listener
 function watchVideoChanges() {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
@@ -93,9 +81,21 @@ function watchVideoChanges() {
   observer.observe(content, { childList: true })
 }
 
+// add plus buttons to comments
+function addPluses(node = document) {
+
+  var commentFooters = node.getElementsByClassName('comment-renderer-footer')
+ 
+  for (let footer of commentFooters) {
+    plusBtn = newPlusButton()
+
+    commentMenu = footer.querySelector('.comment-renderer-action-menu')
+    footer.insertBefore(plusBtn, commentMenu)
+  }
+}
+
 // creates a new plus button element
 function newPlusButton() {
-  // let shouldCaptureNextMutation = false
   let plusBtn = document.createElement('button')
   let plusImg = document.createElement('img')
   let plusUrl = chrome.extension.getURL('images/ic_plus_one_17dp.png')
@@ -108,11 +108,6 @@ function newPlusButton() {
   plusBtn.addEventListener('click', function() {
 
     var observer = new MutationObserver(function(mutations) {
-      // avoids being triggered by the reply box hiding
-      // if (shouldCaptureNextMutation == false) {
-      //   return
-      // }
-        
       mutations.forEach(function(mutation) {
       
         if (mutation.type === 'childList' && mutation.addedNodes.length != 0) {
@@ -120,8 +115,7 @@ function newPlusButton() {
           let replyBtn = mutation.target.querySelector('.comment-simplebox-submit')
 
           replyBtn.disabled = false // i may need to simulate a keyboard event instead of doing this
-          // shouldCaptureNextMutation = false // false to stop the reverse triggering of the mutation
-          ytpf_blocker = true; // stops the YouTube Plus Filter extension from triggering another addPluses pass when hiding my reply
+          ytpf_blocker = true // stops the YouTube Plus Filter extension from triggering another addPluses pass when hiding my reply
 
           replyBtn.click()
         }
@@ -130,7 +124,6 @@ function newPlusButton() {
 
     observer.observe(this.parentElement.lastChild, { childList: true })
 
-    // shouldCaptureNextMutation = true
     this.parentElement.children[0].click()
   })
 
