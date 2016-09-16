@@ -41,6 +41,11 @@ function watchHiddenReplies() {
         mutations.forEach(function(mutation) {
           // this should be triggered only when new nodes (the hidden comments) are added
           if (mutation.type === 'childList' && mutation.addedNodes.length != 0) {
+            // this mutation should be (hopefuly) ignored, since it was caused by something on YouTube Plus Filter
+            if (mutation.addedNodes.length == 1 && ytpf_blocker) {
+              ytpf_blocker == false;
+              return
+            }
             addPluses(btnParent)
           }
         })
@@ -91,6 +96,7 @@ function addPluses(node = document) {
 
             replyBtn.disabled = false // i may need to simulate a keyboard event instead of doing this
             shouldCaptureNextMutation = false // false to stop the reverse triggering of the mutation
+            ytpf_blocker = true; // stops the YouTube Plus Filter extension from triggering another addPluses pass when hiding my reply
             // didPlusReply = true // true to avoid replying more than once
 
             replyBtn.click()
@@ -113,7 +119,6 @@ function watchVideoChanges() {
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.type === 'childList') {
-        console.log('#content changed===========')
 
         // the price you pay for partial loading
         var observer = new MutationObserver(function(mutations) {
