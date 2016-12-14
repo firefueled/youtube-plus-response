@@ -2,7 +2,7 @@
 function watchCommentSectionLoad() {
   var commentRenderer = document.getElementById('comment-section-renderer')
 
-  // the comment section is ready     
+  // the comment section is ready
   if (commentRenderer && commentRenderer.attributes.getNamedItem('data-child-tracking').value.length > 0) {
     addPluses()
     watchHiddenReplies()
@@ -12,7 +12,7 @@ function watchCommentSectionLoad() {
     // comment-section observer
     var observer = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
-      
+
         if (mutation.type === 'childList') {
 
           // the comment section is ready
@@ -66,7 +66,7 @@ function watchVideoChanges() {
         // the price you pay for partial loading
         var observer = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
-            if (mutation.type === 'childList') {  
+            if (mutation.type === 'childList') {
               watchCommentSectionLoad()
             }
           })
@@ -85,12 +85,12 @@ function watchVideoChanges() {
 function addPluses(node = document) {
 
   var commentFooters = node.getElementsByClassName('comment-renderer-footer')
- 
+
   for (let footer of commentFooters) {
     plusBtn = newPlusButton()
 
-    commentMenu = footer.querySelector('.comment-renderer-action-menu')
-    footer.insertBefore(plusBtn, commentMenu)
+    dislikeBtn = footer.querySelector('.sprite-comment-actions.sprite-dislike')
+    dislikeBtn.insertAdjacentElement('afterend', plusBtn)
   }
 }
 
@@ -109,7 +109,7 @@ function newPlusButton() {
 
     var observer = new MutationObserver(function(mutations) {
       mutations.forEach(function(mutation) {
-      
+
         if (mutation.type === 'childList' && mutation.addedNodes.length != 0) {
           mutation.target.querySelector('.comment-simplebox-text').innerHTML = '+'
           let replyBtn = mutation.target.querySelector('.comment-simplebox-submit')
@@ -119,10 +119,10 @@ function newPlusButton() {
 
           replyBtn.click()
         }
-      })    
+      })
     })
 
-    observer.observe(this.parentElement.lastChild, { childList: true })
+    observer.observe(this.parentElement.parentElement.lastChild, { childList: true })
 
     this.parentElement.children[0].click()
   })
@@ -130,8 +130,11 @@ function newPlusButton() {
   return plusBtn
 }
 
-// watches for comment section load on first site loading and refreshes
-watchCommentSectionLoad()
-// watches for page re-renderings when a different video is loaded
-watchVideoChanges()
+// do nothing when not signed-in
+if (document.getElementById('yt-masthead-signin') == null) {
+  // watches for comment section load on first site loading and refreshes
+  watchCommentSectionLoad()
+  // watches for page re-renderings when a different video is loaded
+  watchVideoChanges()
+}
 

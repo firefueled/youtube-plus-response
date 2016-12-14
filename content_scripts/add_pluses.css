@@ -3,10 +3,6 @@
 }
 
 .comment-action-buttons-plusreponse-img {
-    opacity: 0.25;
-}
-
-.comment-renderer:hover .comment-action-buttons-plusreponse-img {
     opacity: 0.4;
 }
 
