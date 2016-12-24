@@ -122,9 +122,9 @@ function newPlusButton() {
       })
     })
 
-    observer.observe(this.parentElement.parentElement.lastChild, { childList: true })
+    observer.observe(this.parentElement.parentElement.parentElement.lastChild, { childList: true })
 
-    this.parentElement.children[0].click()
+    this.parentElement.parentElement.querySelector('.comment-renderer-reply').click()
   })
 
   return plusBtn
